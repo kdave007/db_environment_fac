@@ -1,0 +1,21 @@
+{
+    "articulos": true,
+    "metodo_pago": true,
+    "pais": true,
+    "clientes": true,
+    "detalle_estado": true,
+    "errores": true,
+    "estado_factura_venta": true,
+    "tipo_movimiento": true,
+    "reintentos_fac_venta": true,
+    "recibo_venta": true,
+    "proveedor": true,
+    "forma_pago": true,
+    "forma_pago_caja_banco": true,
+    "general_misc": true,
+    "iva": true,
+    "caja_banco": true,
+    "vendedores": true
+}
+
+

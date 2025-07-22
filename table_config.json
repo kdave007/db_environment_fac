@@ -1,0 +1,21 @@
+{
+    "articulos": false,
+    "metodo_pago": false,
+    "pais": false,
+    "clientes": false,
+    "detalle_estado": false,
+    "errores": false,
+    "estado_factura_venta": false,
+    "tipo_movimiento": false,
+    "reintentos_fac_venta": false,
+    "recibo_venta": false,
+    "proveedor": false,
+    "forma_pago": false,
+    "forma_pago_caja_banco": false,
+    "general_misc": true,
+    "iva": false,
+    "caja_banco": false,
+    "vendedores": false
+}
+
+
