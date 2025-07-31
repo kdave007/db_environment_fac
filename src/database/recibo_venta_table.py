@@ -21,7 +21,7 @@ class ReciboVentaTable(TableSimpleBlueprint):
         return """
         CREATE TABLE IF NOT EXISTS recibo_venta (
             id_sql SERIAL PRIMARY KEY,
-            folio INTEGER,
+            folio VARCHAR,
             num_ref INTEGER,
             dtl_cob_apl_t INTEGER,
             dtl_doc_cob_t INTEGER, 

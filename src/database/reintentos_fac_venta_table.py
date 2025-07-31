@@ -20,7 +20,7 @@ class ReintentosFacturaVentaTable(TableSimpleBlueprint):
         """
         return """
         CREATE TABLE IF NOT EXISTS reintentos_fac_venta (
-            folio INTEGER PRIMARY KEY NOT NULL,
+            folio VARCHAR PRIMARY KEY NOT NULL,
             intentos INTEGER NOT NULL DEFAULT 0,
             fecha_del_registro TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             completado BOOLEAN DEFAULT FALSE

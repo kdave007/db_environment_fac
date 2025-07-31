@@ -21,7 +21,7 @@ class DetalleEstadoTable(TableSimpleBlueprint):
         return """
         CREATE TABLE IF NOT EXISTS detalle_estado(
             id NUMERIC NOT NULL PRIMARY KEY,
-            folio NUMERIC,
+            folio VARCHAR,
             hash_detalle VARCHAR(64),
             fecha DATE,
             estado VARCHAR(50),
