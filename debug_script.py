@@ -30,6 +30,7 @@ print(f"Looking for .env at: {env_path}")
 
 # Import table classes
 from src.database.articulos_table import ArticulosTable
+from src.database.almacen_table import AlmacenTable
 from src.database.caja_banco_table import CajaBancoTable
 from src.database.clientes_table import ClientesTable
 from src.database.detalle_estado_table import DetalleEstadoTable
@@ -72,7 +73,8 @@ def load_table_config():
             return {
                 "articulos": True,
                 "metodo_pago": True,
-                "pais": True
+                "pais": True,
+                "almacen": True
             }
     except Exception as e:
         print(f"Error loading table configuration: {e}")
@@ -80,7 +82,8 @@ def load_table_config():
         return {
             "articulos": True,
             "metodo_pago": True,
-            "pais": True
+            "pais": True,
+            "almacen": True
         }
 
 def main():
@@ -297,31 +300,57 @@ def main():
             if general_misc_table.create_table():
                 print("General_misc table created successfully")
                 
-                # Check if CSV import is enabled
-                use_csv = os.getenv('USE_GENERAL_MISC_CSV', 'false').lower() == 'true'
-                if use_csv:
-                    print("\nImporting data from CSV for general_misc...")
-                    # Get CSV path from environment variable or use default
-                    csv_directory = os.getenv('CSV_DIRECTORY', 'data/csv')
-                    csv_filename = os.getenv('GENERAL_MISC_CSV', GENERAL_MISC_CSV)
-                    csv_path = os.path.join(base_dir, csv_directory, csv_filename)
+                # Check if JSON import is enabled (default to true)
+                use_json = os.getenv('USE_GENERAL_MISC_JSON', 'true').lower() == 'true'
+                if use_json:
+                    print("\nImporting data from JSON for general_misc...")
+                    # Get JSON path from environment variable or use default
+                    json_directory = os.getenv('JSON_DIRECTORY', '')
+                    json_filename = os.getenv('GENERAL_MISC_JSON', 'tables_setup_values.json')
+                    json_path = os.path.join(base_dir, json_directory, json_filename)
                     
-                    if general_misc_table.import_from_csv(csv_path):
-                        print("Data imported successfully for general_misc from CSV")
+                    if os.path.exists(json_path):
+                        if general_misc_table.import_from_json(json_path):
+                            print("Data imported successfully for general_misc from JSON")
+                        else:
+                            print("Failed to import data from JSON for general_misc")
+                            print("Falling back to default data...")
+                            if general_misc_table.insert_default_data():
+                                print("Default data for general_misc loaded successfully")
+                            else:
+                                print("Failed to load default data for general_misc")
                     else:
-                        print("Failed to import data from CSV for general_misc")
-                        print("Make sure the CSV file exists in the configured directory")
-                        print(f"Falling back to default data...")
+                        print(f"JSON file not found at {json_path}")
+                        print("Falling back to default data...")
                         if general_misc_table.insert_default_data():
                             print("Default data for general_misc loaded successfully")
                         else:
                             print("Failed to load default data for general_misc")
-                else:
-                    print("\nLoading default data for general_misc...")
-                    if general_misc_table.insert_default_data():
-                        print("Default data for general_misc loaded successfully")
-                    else:
-                        print("Failed to load default data for general_misc")
+                # else:
+                #     # Check if CSV import is enabled as fallback
+                #     use_csv = os.getenv('USE_GENERAL_MISC_CSV', 'false').lower() == 'true'
+                #     if use_csv:
+                #         print("\nImporting data from CSV for general_misc...")
+                #         # Get CSV path from environment variable or use default
+                #         csv_directory = os.getenv('CSV_DIRECTORY', 'data/csv')
+                #         csv_filename = os.getenv('GENERAL_MISC_CSV', GENERAL_MISC_CSV)
+                #         csv_path = os.path.join(base_dir, csv_directory, csv_filename)
+                        
+                #         if general_misc_table.import_from_csv(csv_path):
+                #             print("Data imported successfully for general_misc from CSV")
+                #         else:
+                #             print("Failed to import data from CSV for general_misc")
+                #             print("Falling back to default data...")
+                #             if general_misc_table.insert_default_data():
+                #                 print("Default data for general_misc loaded successfully")
+                #             else:
+                #                 print("Failed to load default data for general_misc")
+                #     else:
+                #         print("\nLoading default data for general_misc...")
+                #         if general_misc_table.insert_default_data():
+                #             print("Default data for general_misc loaded successfully")
+                #         else:
+                #             print("Failed to load default data for general_misc")
             else:
                 print("Failed to create general_misc table")
         else:
@@ -463,6 +492,50 @@ def main():
                 print("Failed to create vendedores table")
         else:
             print("\nSkipping vendedores table (disabled in configuration)")
+            
+        # Process almacen table if enabled
+        if table_config.get("almacen", True):
+            print("\nCreating almacen table...")
+            almacen_table = AlmacenTable(db_connection)
+            if almacen_table.create_table():
+                print("Almacen table created successfully")
+                
+                # Check if JSON import is enabled (default to true)
+                use_json = os.getenv('USE_ALMACEN_JSON', 'true').lower() == 'true'
+                if use_json:
+                    print("\nImporting data from JSON for almacen...")
+                    # Get JSON path from environment variable or use default
+                    json_directory = os.getenv('JSON_DIRECTORY', '')
+                    json_filename = os.getenv('ALMACEN_JSON', 'tables_setup_values.json')
+                    json_path = os.path.join(base_dir, json_directory, json_filename)
+                    
+                    if os.path.exists(json_path):
+                        if almacen_table.import_from_json(json_path):
+                            print("Data imported successfully for almacen from JSON")
+                        else:
+                            print("Failed to import data from JSON for almacen")
+                            print("Falling back to default data...")
+                            if almacen_table.insert_default_data():
+                                print("Default data for almacen loaded successfully")
+                            else:
+                                print("Failed to load default data for almacen")
+                    else:
+                        print(f"JSON file not found at {json_path}")
+                        print("Falling back to default data...")
+                        if almacen_table.insert_default_data():
+                            print("Default data for almacen loaded successfully")
+                        else:
+                            print("Failed to load default data for almacen")
+                else:
+                    print("\nLoading default data for almacen...")
+                    if almacen_table.insert_default_data():
+                        print("Default data for almacen loaded successfully")
+                    else:
+                        print("Failed to load default data for almacen")
+            else:
+                print("Failed to create almacen table")
+        else:
+            print("\nSkipping almacen table (disabled in configuration)")
         
         print("\nDebug script completed successfully")
         

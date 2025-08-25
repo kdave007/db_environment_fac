@@ -4,6 +4,7 @@ Implementation of the general_misc table using the TableSimpleBlueprint class.
 import os
 import sys
 import csv
+import json
 from pathlib import Path
 from ..config import CSV_DIRECTORY
 from .table_simple_blueprint import TableSimpleBlueprint
@@ -55,7 +56,6 @@ class GeneralMiscTable(TableSimpleBlueprint):
             bool: Success status
         """
         data = [
-            ('XALAPARAUC', 'x', 'almacen', 'XALAP', 'ARAUC'),
             ('SIVX3', 'x', 'division', 'XALAP', 'ARAUC'),
             ('SIVX', 'x', 'empresa', 'XALAP', 'ARAUC'),
             ('1', 'x', 'moneda', 'XALAP', 'ARAUC'),
@@ -65,6 +65,95 @@ class GeneralMiscTable(TableSimpleBlueprint):
         ]
         
         return self.insert_data(data)
+        
+    def import_from_json(self, json_path):
+        """
+        Import profile data from a JSON file and insert into the general_misc table.
+        
+        The JSON file should have the following structure:
+        {
+            "profiles": [
+                {
+                    "plaza": "XALAP",
+                    "tienda": "ROTON",
+                    "serie": "7",
+                    "division": "SIVX2",
+                    "empresa": "SIVX",
+                    "moneda": 1,
+                    "almacen": "XALAPROTON"
+                }
+            ]
+        }
+        
+        Args:
+            json_path (str): Path to the JSON file
+            
+        Returns:
+            bool: Success status
+        """
+        try:
+            # Check if file exists
+            if not os.path.exists(json_path):
+                print(f"JSON file not found: {json_path}")
+                return False
+                
+            # Read the JSON file
+            with open(json_path, 'r', encoding='utf-8') as file:
+                json_data = json.load(file)
+            
+            if 'profiles' not in json_data:
+                print("Error: JSON file does not contain 'profiles' key")
+                return False
+                
+            profiles = json_data['profiles']
+            if not profiles:
+                print("Warning: No profiles found in JSON file")
+                return False
+                
+            # Prepare data for insertion
+            data = []
+            for profile in profiles:
+                # For each profile, create multiple rows (one for each attribute)
+                # Each row format: (id_velneo, id_pvsi, title, plaza, tienda)
+                
+                plaza = profile.get('plaza', '')
+                tienda = profile.get('tienda', '')
+                
+                # Add division entry
+                if 'division' in profile:
+                    data.append((profile['division'], 'x', 'division', plaza, tienda))
+                
+                # Add empresa entry
+                if 'empresa' in profile:
+                    data.append((profile['empresa'], 'x', 'empresa', plaza, tienda))
+                
+                # Add moneda entry (convert to string if it's a number)
+                if 'moneda' in profile:
+                    data.append((str(profile['moneda']), 'x', 'moneda', plaza, tienda))
+                
+                # # Add plaza entry
+                # if 'plaza' in profile:
+                #     data.append((plaza, 'x', 'plaza', plaza, tienda))
+                
+                # Add serie entry
+                if 'serie' in profile:
+                    data.append((profile['serie'], 'x', 'serie', plaza, tienda))
+                    
+            # Insert the data
+            if data:
+                return self.insert_data(data)
+            else:
+                print("No valid data found in profiles")
+                return False
+                
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return False
+        except Exception as e:
+            print(f"Error importing from JSON: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
     
     def _clean_csv_data(self, csv_path):
         """

@@ -1,0 +1,41 @@
+{
+    "profiles":[
+        {
+            "plaza":"XALAP",
+            "tienda":"ROTON",
+            "serie":"7",
+            "division":"SIVX2",
+            "empresa":"SIVX",
+            "moneda":1,
+            "almacen":"XALAPROTON"
+        },
+        {
+            "plaza":"XALAP",
+            "tienda":"ARAUC",
+            "serie":"9",
+            "division":"SIVX3",
+            "empresa":"SIVX",
+            "moneda":1,
+            "almacen":"XALAPARAUC"
+        },
+        {
+            "plaza":"XALAP",
+            "tienda":"REBSA",
+            "serie":"8",
+            "division":"SIVX1",
+            "empresa":"SIVX",
+            "moneda":1,
+            "almacen":"XALAPREBSA"
+        },
+        {
+            "plaza":"XALAP",
+            "tienda":"CIRCU",
+            "serie":"10",
+            "division":"SIVX4",
+            "empresa":"SIVX",
+            "moneda":1,
+            "almacen":"XALAPCIRCU"
+        }
+    ]
+    
+}

@@ -4,6 +4,8 @@ Database Installer for VTA
 
 This script creates and populates database tables for a secondary process.
 It handles table creation and data import from CSV files.
+
+pyinstaller --clean debug_script.spec
 """
 import os
 import sys

@@ -1,4 +1,5 @@
 {
+    "almacen":true,
     "articulos": false,
     "metodo_pago": false,
     "pais": false,
@@ -12,7 +13,7 @@
     "proveedor": false,
     "forma_pago": false,
     "forma_pago_caja_banco": false,
-    "general_misc": true,
+    "general_misc": false,
     "iva": false,
     "caja_banco": false,
     "vendedores": false
