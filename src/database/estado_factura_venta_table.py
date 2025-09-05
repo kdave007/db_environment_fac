@@ -20,9 +20,10 @@ class EstadoFacturaVentaTable(TableSimpleBlueprint):
         """
         return """
         CREATE TABLE IF NOT EXISTS estado_factura_venta (
-            id NUMERIC PRIMARY KEY NOT NULL,
-            folio VARCHAR,
+            id NUMERIC NOT NULL,
+            folio VARCHAR PRIMARY KEY,
             total_partidas NUMERIC DEFAULT 0,
+            total_recibos NUMERIC DEFAULT 0,
             hash VARCHAR,
             estado VARCHAR NOT NULL,
             fecha_emision DATE NOT NULL,

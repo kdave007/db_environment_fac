@@ -20,17 +20,15 @@ class ReciboVentaTable(TableSimpleBlueprint):
         """
         return """
         CREATE TABLE IF NOT EXISTS recibo_venta (
-            id_sql SERIAL PRIMARY KEY,
+            id_sql SERIAL,
             folio VARCHAR,
             num_ref INTEGER,
-            dtl_cob_apl_t INTEGER,
-            dtl_doc_cob_t INTEGER, 
-            cta_cor_t INTEGER,  
-            rbo_cob_t INTEGER, 
+            respuesta VARCHAR, 
             hash VARCHAR(64),
             estado VARCHAR(20),
             fecha_emision DATE,
-            fecha_procesamiento TIMESTAMP 
+            fecha_procesamiento TIMESTAMP,
+            indice NUMERIC
         );
         """
     
